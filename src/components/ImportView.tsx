@@ -39,7 +39,6 @@ export default function ImportView({ accounts, transferCount }: { accounts: Acco
   return (
     <div>
       <h2>Import</h2>
-      <button onClick={handleDropIndexedDb}>Drop database</button>
       <label
         className={`drop ${dragging ? 'drag' : ''}`}
         onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
@@ -85,6 +84,7 @@ export default function ImportView({ accounts, transferCount }: { accounts: Acco
         </>
       )}
       <p className="muted">Everything stays in your browser (IndexedDB). Nothing is uploaded.</p>
+      <button className="danger" onClick={handleDropIndexedDb}>Drop database</button>
     </div>
   );
 }

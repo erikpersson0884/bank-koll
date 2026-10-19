@@ -3,7 +3,6 @@ import ImportView from './components/ImportView';
 import Overview from './components/Overview';
 import TransactionTable from './components/TransactionTable';
 import { useData } from './lib/useData';
-import './index.css';
 
 type Tab = 'import' | 'overview' | 'transactions';
 
@@ -13,14 +12,17 @@ export default function App() {
 
   return (
     <div className="app">
-      <nav>
-        {(['import', 'overview', 'transactions'] as Tab[]).map((t) => (
-          <button key={t} className={tab === t ? 'active' : ''} onClick={() => setTab(t)}>
-            {t[0].toUpperCase() + t.slice(1)}
-          </button>
-        ))}
-      </nav>
-      {loading ? <p>Loading…</p> : (
+      <header className="top">
+        <div className="brand">Bank-koll</div>
+        <nav>
+          {(['import', 'overview', 'transactions'] as Tab[]).map((t) => (
+            <button key={t} className={tab === t ? 'active' : ''} onClick={() => setTab(t)}>
+              {t[0].toUpperCase() + t.slice(1)}
+            </button>
+          ))}
+        </nav>
+      </header>
+      {loading ? <p className="muted">Loading…</p> : (
         <>
           {tab === 'import' && <ImportView accounts={accounts} transferCount={transferCount} />}
           {tab === 'overview' && <Overview txs={txs} categoryOf={categoryOf} />}
