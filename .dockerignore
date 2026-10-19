@@ -1,0 +1,13 @@
+node_modules
+dist
+build
+.git
+.github
+.gitignore
+Dockerfile
+.dockerignore
+npm-debug.log
+.env*
+
+
+src/rules.json
