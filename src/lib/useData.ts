@@ -5,7 +5,11 @@ import { categorize, DEFAULT_RULES } from './categorize';
 import { matchTransfers } from './transfers';
 import { TRANSFER, UNCATEGORIZED } from './types';
 import type { Rule, Transaction } from './types';
-import customRules from '../rules.json';
+
+// src/rules.json holds personal rules and is gitignored, so it may not exist
+// (fresh clone, Docker or CI build). A glob import yields {} when the file is missing.
+const personalModules = import.meta.glob<Rule[]>('@/rules.json', { eager: true, import: 'default' });
+const customRules: Rule[] = Object.values(personalModules).flat();
 
 export function useData() {
   const txs = useLiveQuery(() => db.transactions.orderBy('date').reverse().toArray(), []);
@@ -16,7 +20,7 @@ export function useData() {
 
   // seed starter rules on first run (put, not add, so StrictMode's double effect is harmless)
   useEffect(() => {
-    const allRules: Rule[] = [...DEFAULT_RULES, ...customRules] as Rule[];
+    const allRules: Rule[] = [...DEFAULT_RULES, ...customRules];
     db.rules.count().then((c) => {
       if (c === 0) db.rules.bulkPut(allRules);
     });

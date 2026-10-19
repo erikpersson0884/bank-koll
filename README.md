@@ -1,5 +1,11 @@
 # Bank-koll
 
+[![Last Commit][last-commit-shield]][last-commit-url]
+[![Build Status][build-shield]][build-url]
+[![Test Coverage][coverage-shield]][coverage-url]
+[![Repo Size][repo-size-shield]][repo-size-url]
+[![Author][author-shield]][author-url]
+
 A local-only web app that turns Swedbank CSV exports into a readable overview of where your money goes. Import one or more account exports, let the app categorize the transactions, and look at monthly spending, income vs. spending, and your biggest merchants and contacts.
 
 **Privacy:** everything runs in your browser. Transactions, rules and settings are stored in IndexedDB on your own machine. Nothing is uploaded anywhere.
@@ -246,3 +252,41 @@ Keep real data out of fixtures. `.csv` files should never be committed, and fixt
 - Month and account filters on the Overview
 - Recognize `Swish <merchant>` payments (for example Västtrafik, Telia) separately from person-to-person Swish
 - Recurring-purchase detection and a "money out right after money in" view
+
+
+
+
+
+# Authors
+- <a href="https://erikpersson0884.github.io/portfolio">Erik Persson</a> 🐦
+
+
+
+
+
+
+<!-- Repo info Shields -->
+[last-commit-shield]: https://img.shields.io/github/last-commit/erikpersson0884/bank-koll/main?style=for-the-badge&cacheSeconds=30
+[last-commit-url]: https://github.com/erikpersson0884/bank-koll/commits/main
+
+[repo-size-shield]: https://img.shields.io/github/repo-size/erikpersson0884/bank-koll?style=for-the-badge&cacheSeconds=60
+[repo-size-url]: https://github.com/erikpersson0884/bank-koll
+
+[author-shield]: https://img.shields.io/badge/Author-Erik%20Persson-blue?style=for-the-badge
+[author-url]: https://github.com/erikpersson0884
+
+[build-shield]: https://img.shields.io/github/actions/workflow/status/erikpersson0884/bank-koll/frontend-tests.yml?branch=main&style=for-the-badge
+[build-url]: https://github.com/erikpersson0884/bank-koll/actions
+
+
+<!-- Frameworks & Languages Shields -->
+[vite-shield]: https://img.shields.io/badge/Vite-646CFF?logo=Vite&logoColor=white&style=for-the-badge
+[react-shield]: https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=white&style=for-the-badge
+[vitest-shield]: https://img.shields.io/badge/Vitest-3E7CFF?logo=vitest&logoColor=white&style=for-the-badge
+[docker-shield]: https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white&style=for-the-badge
+[typescript-shield]: https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white&style=for-the-badge
+
+
+<!-- Test Coverage Shields -->
+[coverage-shield]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/erikpersson0884/bank-koll/coverage/.github/coverage.json&style=for-the-badge&v=2
+[coverage-url]: https://github.com/erikpersson0884/bank-koll/actions
