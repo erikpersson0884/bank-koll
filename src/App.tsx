@@ -9,7 +9,7 @@ type Tab = 'import' | 'overview' | 'transactions';
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('import');
-  const { txs, loading, categoryOf, categories } = useData();
+  const { txs, loading, categoryOf, categories, accounts, accountName, transferCount } = useData();
 
   return (
     <div className="app">
@@ -22,9 +22,9 @@ export default function App() {
       </nav>
       {loading ? <p>Loading…</p> : (
         <>
-          {tab === 'import' && <ImportView />}
+          {tab === 'import' && <ImportView accounts={accounts} transferCount={transferCount} />}
           {tab === 'overview' && <Overview txs={txs} categoryOf={categoryOf} />}
-          {tab === 'transactions' && <TransactionTable txs={txs} categoryOf={categoryOf} categories={categories} />}
+          {tab === 'transactions' && <TransactionTable txs={txs} categoryOf={categoryOf} categories={categories} accountName={accountName} />}
         </>
       )}
     </div>

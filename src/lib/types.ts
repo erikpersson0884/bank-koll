@@ -1,4 +1,5 @@
 export interface RawTransaction {
+  accountId: string; // "<Clearingnummer>-<Kontonummer>" from the CSV
   date: string; // Transaktionsdag, YYYY-MM-DD
   description: string;
   reference: string;
@@ -12,6 +13,11 @@ export interface Transaction extends RawTransaction {
   id: string;
   kind: Kind;
   counterparty: string;
+}
+
+export interface Account {
+  id: string;
+  name: string;
 }
 
 export interface Rule {
@@ -30,6 +36,7 @@ export interface CategoryContext {
   overrides: Record<string, string>; // transaction id -> category
   labels: Label[];
   rules: Rule[];
+  transferIds: Set<string>; // transactions matched as internal transfers between accounts
 }
 
 export const TRANSFER = 'Transfer';

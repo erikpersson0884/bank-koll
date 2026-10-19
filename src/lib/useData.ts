@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db } from './db';
+import { db, defaultAccountName } from './db';
 import { categorize, DEFAULT_RULES } from './categorize';
+import { matchTransfers } from './transfers';
 import { TRANSFER, UNCATEGORIZED } from './types';
 import type { Transaction } from './types';
 
@@ -10,6 +11,7 @@ export function useData() {
   const rules = useLiveQuery(() => db.rules.toArray(), []);
   const labels = useLiveQuery(() => db.labels.toArray(), []);
   const overrides = useLiveQuery(() => db.overrides.toArray(), []);
+  const accounts = useLiveQuery(() => db.accounts.toArray(), []);
 
   // seed starter rules on first run (put, not add, so StrictMode's double effect is harmless)
   useEffect(() => {
@@ -18,16 +20,25 @@ export function useData() {
     });
   }, []);
 
+  const transactions = useMemo(() => txs ?? [], [txs]);
+  const transferIds = useMemo(() => matchTransfers(transactions), [transactions]);
+
   const ctx = useMemo(
     () => ({
       overrides: Object.fromEntries((overrides ?? []).map((o) => [o.id, o.category])),
       labels: labels ?? [],
       rules: rules ?? [],
+      transferIds,
     }),
-    [overrides, labels, rules],
+    [overrides, labels, rules, transferIds],
   );
 
   const categoryOf = useCallback((t: Transaction) => categorize(t, ctx), [ctx]);
+
+  const accountName = useCallback(
+    (id: string) => (accounts ?? []).find((a) => a.id === id)?.name ?? defaultAccountName(id),
+    [accounts],
+  );
 
   const categories = useMemo(() => {
     const set = new Set<string>([UNCATEGORIZED, TRANSFER]);
@@ -37,5 +48,14 @@ export function useData() {
     return [...set].sort();
   }, [ctx]);
 
-  return { txs: txs ?? [], loading: txs === undefined, ctx, categoryOf, categories };
+  return {
+    txs: transactions,
+    loading: txs === undefined,
+    ctx,
+    categoryOf,
+    categories,
+    accounts: accounts ?? [],
+    accountName,
+    transferCount: transferIds.size / 2,
+  };
 }

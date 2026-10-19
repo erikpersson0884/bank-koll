@@ -6,8 +6,8 @@ import type { Transaction } from '../lib/types';
 const LIMIT = 500;
 
 export default function TransactionTable({
-  txs, categoryOf, categories,
-}: { txs: Transaction[]; categoryOf: (t: Transaction) => string; categories: string[] }) {
+  txs, categoryOf, categories, accountName,
+}: { txs: Transaction[]; categoryOf: (t: Transaction) => string; categories: string[]; accountName: (id: string) => string }) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('');
 
@@ -46,11 +46,12 @@ export default function TransactionTable({
       </div>
       <datalist id="cats">{categories.map((c) => <option key={c} value={c} />)}</datalist>
       <table>
-        <thead><tr><th>Date</th><th>Description</th><th className="r">Amount</th><th>Category</th></tr></thead>
+        <thead><tr><th>Date</th><th>Account</th><th>Description</th><th className="r">Amount</th><th>Category</th></tr></thead>
         <tbody>
           {rows.slice(0, LIMIT).map(({ t, cat }) => (
             <tr key={t.id}>
               <td>{t.date}</td>
+              <td>{accountName(t.accountId)}</td>
               <td>{t.description}</td>
               <td className={`r ${t.amount < 0 ? 'neg' : 'pos'}`}>{t.amount.toFixed(2)}</td>
               <td>

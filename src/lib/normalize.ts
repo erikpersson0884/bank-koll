@@ -13,9 +13,9 @@ function hash(str: string): string {
   return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
 }
 
-/** Radnummer is deliberately excluded: it changes between exports. */
+/** Includes the account. Radnummer is deliberately excluded: it changes between exports. */
 export function transactionId(t: RawTransaction): string {
-  return hash([t.date, t.description, t.amount, t.balance ?? ''].join('|'));
+  return hash([t.accountId, t.date, t.description, t.amount, t.balance ?? ''].join('|'));
 }
 
 const PHONE = /\+?\d[\d\s-]{7,}\d/;

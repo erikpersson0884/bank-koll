@@ -1,18 +1,5 @@
-const TRANSFER = 'Transfer';
-const UNCATEGORIZED = 'Uncategorized';
-
-type Transaction = {
-  id: string;
-  kind: string;
-  counterparty: string;
-  description: string;
-};
-
-type CategoryContext = {
-  overrides: Record<string, string | undefined>;
-  labels: Array<{ counterparty: string; category: string }>;
-  rules: Array<{ pattern: string; category: string }>;
-};
+import { TRANSFER, UNCATEGORIZED } from './types';
+import type { CategoryContext, Transaction } from './types';
 
 export const DEFAULT_RULES = [
   { id: 'food', pattern: 'maxburgers|mcdgb', category: 'Food' },
@@ -20,12 +7,16 @@ export const DEFAULT_RULES = [
   { id: 'phone', pattern: 'telia', category: 'Phone' },
 ];
 
-/** Order: manual override -> transfer -> counterparty label -> keyword rules -> Uncategorized */
+/**
+ * Order: manual override -> matched internal transfer -> counterparty label -> keyword rules -> Uncategorized.
+ * An "Överföring" that is NOT matched to one of your accounts is not assumed to be internal:
+ * it falls through and lands in Uncategorized so you can review it.
+ */
 export function categorize(tx: Transaction, ctx: CategoryContext): string {
   const override = ctx.overrides[tx.id];
   if (override) return override;
 
-  if (tx.kind === 'transfer') return TRANSFER;
+  if (ctx.transferIds.has(tx.id)) return TRANSFER;
 
   const label = ctx.labels.find((l) => l.counterparty === tx.counterparty);
   if (label) return label.category;

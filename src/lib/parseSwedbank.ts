@@ -37,7 +37,7 @@ export function parseSwedbank(text: string): RawTransaction[] {
   const result = Papa.parse<Record<string, string>>(body, {
     header: true,
     skipEmptyLines: true,
-    transformHeader: (h) => h.trim(),
+    transformHeader: (h: string) => h.trim(),
   });
 
   const rows: RawTransaction[] = [];
@@ -46,7 +46,10 @@ export function parseSwedbank(text: string): RawTransaction[] {
     const date = (r['Transaktionsdag'] ?? '').trim();
     if (!date || Number.isNaN(amount)) continue;
     const bal = parseAmount(r['Bokfört saldo'] ?? '');
+    const clearing = (r['Clearingnummer'] ?? '').trim();
+    const konto = (r['Kontonummer'] ?? '').trim();
     rows.push({
+      accountId: clearing || konto ? `${clearing}-${konto}` : 'unknown',
       date,
       description: (r['Beskrivning'] ?? '').trim(),
       reference: (r['Referens'] ?? '').trim(),
