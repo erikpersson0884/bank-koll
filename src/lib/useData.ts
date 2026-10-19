@@ -4,7 +4,8 @@ import { db, defaultAccountName } from './db';
 import { categorize, DEFAULT_RULES } from './categorize';
 import { matchTransfers } from './transfers';
 import { TRANSFER, UNCATEGORIZED } from './types';
-import type { Transaction } from './types';
+import type { Rule, Transaction } from './types';
+import customRules from '../rules.json';
 
 export function useData() {
   const txs = useLiveQuery(() => db.transactions.orderBy('date').reverse().toArray(), []);
@@ -15,8 +16,9 @@ export function useData() {
 
   // seed starter rules on first run (put, not add, so StrictMode's double effect is harmless)
   useEffect(() => {
+    const allRules: Rule[] = [...DEFAULT_RULES, ...customRules] as Rule[];
     db.rules.count().then((c) => {
-      if (c === 0) db.rules.bulkPut(DEFAULT_RULES);
+      if (c === 0) db.rules.bulkPut(allRules);
     });
   }, []);
 

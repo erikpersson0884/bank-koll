@@ -27,9 +27,19 @@ export default function ImportView({ accounts, transferCount }: { accounts: Acco
     setMessages(out);
   }
 
+  const handleDropIndexedDb = () => {
+      db.delete().then(() => {
+        setMessages(['Database dropped. Please refresh the page.']);
+        window.location.reload();
+      }).catch((e) => {
+        setMessages([`Failed to drop database: ${(e as Error).message}`]);
+      });
+  };
+
   return (
     <div>
       <h2>Import</h2>
+      <button onClick={handleDropIndexedDb}>Drop database</button>
       <label
         className={`drop ${dragging ? 'drag' : ''}`}
         onDragOver={(e) => { e.preventDefault(); setDragging(true); }}

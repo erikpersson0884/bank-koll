@@ -21,6 +21,7 @@ export default function TransactionTable({
   }, [txs, categoryOf, query, category]);
 
   const uncategorized = useMemo(() => txs.filter((t) => categoryOf(t) === UNCATEGORIZED).length, [txs, categoryOf]);
+  const categorized = useMemo(() => txs.filter((t) => categoryOf(t) !== UNCATEGORIZED).length, [txs, categoryOf]);
 
   async function setOverride(id: string, value: string) {
     const v = value.trim();
@@ -33,7 +34,7 @@ export default function TransactionTable({
       <h2>Transactions</h2>
       {uncategorized > 0 && (
         <p className="msg">
-          {uncategorized} uncategorized.{' '}
+          {uncategorized} / {categorized} are uncategorized.{' '}
           <button onClick={() => setCategory(UNCATEGORIZED)}>Show queue</button>
         </p>
       )}
